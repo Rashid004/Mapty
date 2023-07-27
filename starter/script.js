@@ -182,9 +182,8 @@ class App {
       )
         return alert('Inputs have to be positive numbers!');
 
-      workout = new Cycling([lat, lng], distance, duration, elevation);
-    }
-
+  workout = new Cycling([lat, lng], distance, duration, elevation);
+  }
     // Add new object to workout array
     this.#workouts.push(workout);
     console.log(workout);
@@ -217,8 +216,7 @@ class App {
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
       )
       .openPopup();
-  }
-  
+  }; 
  _renderWorkout(workout) {
   let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
@@ -235,8 +233,7 @@ class App {
           <span class="workout__value">${workout.duration}</span>
           <span class="workout__unit">min</span>
         </div>
-    `;
-
+`;
   if (workout.type === 'running')
     html += `
         <div class="workout__details">
@@ -271,10 +268,9 @@ class App {
   }
 
   _moveToPopup(e) {
-   
-    const workoutEl = e.target.closest('.workout');
-  
 
+    const workoutEl = e.target.closest('.workout');
+  //  gaurd clause
     if(!workoutEl) return ;
 
     const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
@@ -289,7 +285,7 @@ class App {
 
   _setLocalStorage() {
   localStorage.setItem('workouts', JSON.stringify(this.#workouts));
-  }
+  };
 
   _getLocalStorage() {
   const data = JSON.parse(localStorage.getItem('workouts'));
@@ -307,5 +303,4 @@ class App {
   location.reload();
  }
 };
-
 const app = new App();
