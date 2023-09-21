@@ -1,0 +1,2 @@
+const firstName = 'Ansari Rashid';
+
