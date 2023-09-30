@@ -230,5 +230,18 @@ cursor: pointer;
 
 transform: translate(10px, -102px);
 right: -90%;
-position: relativ
+position: relative;
+}
+.remove-allBtn {
+ font-size: 14px;
+ background-color: var(--color-brand--2); 
+ color: #fff;
+ padding: 8px;
+ border-radius: 8px;
+ transition: all;
+ margin-bottom: 6px;
+}
+.remove-allBtn:hover {
+  background-color: var(--color-brand--1);
+  color: #fff;
 }

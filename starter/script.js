@@ -72,7 +72,7 @@ const btnDelete = document.querySelector('.btn-delete');
 
 class App {
   #map;
-  #mapZoomLevel = 13;
+  #mapZoomLevel = 11;
   #mapEvent;
   #workouts = [];
 
@@ -115,6 +115,7 @@ class App {
     this.#map.on('click', this._showForm.bind(this));
     this.#workouts.forEach(work => {
       this._renderWorkoutMarker(work);
+
     })
   }
 
@@ -142,7 +143,7 @@ class App {
 
   _newWorkout(e) {
     const validInputs = (...inputs) =>
-      inputs.every(inp => Number.isFinite(inp));
+    inputs.every(inp => Number.isFinite(inp));
     const allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
     e.preventDefault();
@@ -201,7 +202,6 @@ class App {
     // set local storage to all workouts
     this._setLocalStorage();
 
-    this._setRemoveItem();
     
   }
   _renderWorkoutMarker(workout) {
@@ -220,9 +220,10 @@ class App {
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
       )
       .openPopup();
+        
   }; 
  _renderWorkout(workout) {
-  let html = `
+   let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
         <div class="workout__details">
@@ -238,8 +239,8 @@ class App {
           <span class="workout__unit">min</span>
         </div>
 `;
-  if (workout.type === 'running')
-    html += `
+   if (workout.type === 'running')
+     html += `
         <div class="workout__details">
           <span class="workout__icon">⚡️</span>
           <span class="workout__value">${workout.pace.toFixed(1)}</span>
@@ -253,8 +254,8 @@ class App {
       </li>
       `;
 
-  if (workout.type === 'cycling')
-    html += `
+   if (workout.type === 'cycling')
+     html += `
         <div class="workout__details">
           <span class="workout__icon">⚡️</span>
           <span class="workout__value">${workout.speed.toFixed(1)}</span>
@@ -267,26 +268,31 @@ class App {
         </div>
       </li>
 `;
- // Add remove button
-  html += `
+   // Add remove button
+   html += `
         <button class="btn-delete">&Cross;</button>
       </li>
 `;
 
-  const workoutElement = document.createElement('div');
-  workoutElement.innerHTML = html.trim();
+   const workoutElement = document.createElement('div');
+   workoutElement.innerHTML = html.trim();
 
-  // Get the remove button inside the workout element
-  const removeButton = workoutElement.querySelector('.btn-delete');
+   // Get the remove button inside the workout element
+   const removeButton = workoutElement.querySelector('.btn-delete');
 
-  // Add click event listener to the remove button
-  removeButton.addEventListener('click', () => {
-    // Remove the workout element when the button is clicked
-    workoutElement.remove();
-  });
+   // Add click event listener to the remove button
+   removeButton.addEventListener('click', () => {
+     // Remove the workout element when the button is clicked
+     workoutElement.remove();
+      
+      const updatedWorkouts = this.#workouts.filter(
+        item => item.id !== workout.id
+      );
+      localStorage.setItem('workouts', JSON.stringify(updatedWorkouts));
+   });
 
-  form.insertAdjacentElement('afterend', workoutElement);
-}
+   form.insertAdjacentElement('afterend', workoutElement);
+ }
 
 
   _moveToPopup(e) {
@@ -318,6 +324,7 @@ class App {
 
   this.#workouts.forEach(work => {
     this._renderWorkout(work);
+
   });
 }
  reset() {
@@ -328,4 +335,3 @@ class App {
 };
 const app = new App();
 
-document.createElement('div');

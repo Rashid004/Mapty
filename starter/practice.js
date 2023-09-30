@@ -110,8 +110,8 @@ class App {
 
     this.#map.on('click', this._showForm.bind(this));
     this.#workout.forEach(work => {
-    this._renderWorkoutMarker(work);
-    })
+      this._renderWorkoutMarker(work);
+    });
   }
   // }
 
@@ -258,35 +258,81 @@ class App {
     form.insertAdjacentHTML('afterend', html);
   }
   _movePopUp(e) {
-  const workoutEl = e.target.closest('.workout');
-  //  gaurd clause
-  if (!workoutEl) return;
+    const workoutEl = e.target.closest('.workout');
+    //  gaurd clause
+    if (!workoutEl) return;
 
-  const workout = this.#workout.find(work => work.id === workoutEl.dataset.id);
+    const workout = this.#workout.find(
+      work => work.id === workoutEl.dataset.id
+    );
 
-  this.#map.setView(workout.coords, this.#mapZoomLevel, {
-    animate: true,
-    pan: {
-      duration: 1,
-    },
-  });
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
     workout.click();
   }
   _setLocalStorage() {
-    localStorage.setItem('workouts',JSON.stringify(this.#workout));
+    localStorage.setItem('workouts', JSON.stringify(this.#workout));
   }
 
   _getLocalStorage() {
-   const data = JSON.parse(localStorage.getItem('workouts'));
-   console.log(data);
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    console.log(data);
 
-   if(!data) return;
+    if (!data) return;
 
-   this.#workout = data;
+    this.#workout = data;
 
-   this.#workout.forEach(work => {
-    this._renderWorkout(work);
-   })
+    this.#workout.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
+
+  _deleteWorkout(e) {
+    if (e.target.className === 'close') {
+      const workoutEl = e.target.closest('.workout');
+      console.log(workoutEl);
+
+      if (!workoutEl) return;
+
+      const workout = this.#workout.find(
+        workout => workout.id === workoutEl.dataset.id
+      );
+
+      console.log(workout);
+
+      const workoutIndex = this.#workouts.indexOf(workout);
+
+      // remove workout from array
+      this.#workout.splice(workoutIndex, 1);
+      console.log(this.#workout);
+
+      // remove workout from list
+      workoutEl.remove();
+
+      // remove workout popup
+      this._clearMarker(workout.id);
+
+      // update local storage
+      this._setLocalStorage();
+    }
+  }
+
+  _clearMarker(id) {
+    console.log(id);
+    console.log(this.#marker);
+    const new_markers = [];
+    this.#marker.forEach(marker => {
+      if (marker.id === id) {
+        this.#map.removeLayer(marker);
+      } else {
+        new_markers.push(marker);
+      }
+      this.#marker = new_markers;
+    });
   }
 }
 
